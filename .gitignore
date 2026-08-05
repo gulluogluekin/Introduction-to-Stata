@@ -1,0 +1,25 @@
+# Stata-generated data and logs
+data/derived/*
+!data/derived/.gitkeep
+output/logs/*
+!output/logs/.gitkeep
+output/figures/*
+!output/figures/.gitkeep
+output/tables/*
+!output/tables/.gitkeep
+
+# Stata temporary and backup files
+*.log
+*.smcl
+*.gph
+*.stswp
+*.tmp
+*.bak
+~*
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+
+# Local document build helper
+.build_syllabus_docx.py
