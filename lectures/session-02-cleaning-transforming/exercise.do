@@ -1,22 +1,16 @@
 version 18.0
 clear all
 set more off
+set varabbrev off
 
-capture mkdir "output"
-capture mkdir "output/logs"
-capture confirm file "data/derived/firms_2024_imported.dta"
-if _rc != 0 quietly do "scripts/01_prepare_data.do"
+capture mkdir "data/derived"
+import delimited using "data/raw/hotelbookingdata-vienna.csv", varnames(1) clear
 
-capture log close checkpoint02
-log using "output/logs/checkpoint-02.log", name(checkpoint02) text replace
-use "data/derived/firms_2024_imported.dta", clear
+* TODO 1: Convert center1distance from a string with "miles" to a numeric variable.
+* TODO 2: Extract a readable accommodation type from accommodationtype.
+* TODO 3: Convert guestreviewsrating to a numeric 0–5 rating.
+* TODO 4: Recode a zero star rating as missing and explain the decision.
+* TODO 5: Investigate missing hotel_id values and perfect duplicate records.
+* TODO 6: Validate the cleaned key and ranges with isid and at least three asserts.
 
-* TODO 1: Standardize industry_code, region_code, and export_status.
-* TODO 2: Create and label a numeric exporter indicator.
-* TODO 3: Convert founded to a numeric Stata date and apply %td formatting.
-* TODO 4: Replace negative investment with missing and explain why zero is different.
-* TODO 5: Create annual_revenue but set it missing when fewer than four quarters exist.
-* TODO 6: Add at least two assert statements that document data expectations.
-
-display as text "Complete the TODO items, save a clean dataset, and submit this do-file."
-log close checkpoint02
+display as text "Complete the TODO items, save a clean hotel file, and submit this do-file."

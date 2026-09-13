@@ -1,22 +1,21 @@
 version 18.0
 clear all
 set more off
+set varabbrev off
 
-capture mkdir "output"
+capture mkdir "data/derived"
 capture mkdir "output/logs"
-capture log close checkpoint01
-log using "output/logs/checkpoint-01.log", name(checkpoint01) text replace
+capture log close session01exercise
+log using "output/logs/session01_exercise.log", name(session01exercise) text replace
 
-import delimited using "data/raw/firms_2023.csv", clear varnames(1)
+import delimited using "data/raw/hotelbookingdata-vienna.csv", varnames(1) clear
+assert _N == 430
 
-describe
-count
-
-* TODO 1: Use codebook on firm_id, industry_code, and export_status.
-* TODO 2: Summarize employees and the four quarterly revenue variables.
-* TODO 3: Check that firm_id uniquely identifies every row with isid.
-* TODO 4: Generate year = 2023, label it, and move it after firm_id.
-* TODO 5: Save your completed dataset under data/derived/.
+* TODO 1: State the unit of observation in a comment.
+* TODO 2: Use codebook on hotel_id, price, and two raw string variables.
+* TODO 3: Summarize price, star rating, and the number of guest reviews.
+* TODO 4: Count missing hotel identifiers and report duplicate hotel_id values.
+* TODO 5: Save the imported data under data/derived/ without changing the CSV.
 
 display as text "Complete the five TODO items, rerun the file, and submit this do-file."
-log close checkpoint01
+log close session01exercise

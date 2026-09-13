@@ -1,24 +1,23 @@
-# Session 1: Stata workflow
+# Session 1: Stata workflow and raw hotel data
 
 Date: 14 September 2026
 
 ## Learning goals
 
-- Distinguish Stata's data, results, command, and do-file workflow.
-- Run a do-file from the repository root and preserve a text log.
-- Import a local CSV and inspect variables, storage types, values, and missingness.
-- Verify a candidate key and save a compressed `.dta` file.
+- Work from the repository root with a do-file and text log.
+- Import the raw Vienna hotel CSV and identify its unit of observation.
+- Use `describe`, `codebook`, `summarize`, `tabulate`, and `list` deliberately.
+- Diagnose missing identifiers and duplicate hotel records before cleaning.
+- Save an imported Stata dataset without modifying the raw CSV.
 
-## Files
+## Data context
 
-- `lecture.do`: annotated live-coding workflow using the 2024 firm extract.
-- `exercise.do`: checkpoint using the 2023 extract.
+The file contains raw, anonymized hotel offers collected for Békés and Kézdi's *Data
+Analysis for Business, Economics, and Policy*. Its 430 rows include awkward string fields,
+missing ratings, and duplicate records that later sessions will clean.
 
 ## Checkpoint
 
-Complete the five TODO items in `exercise.do`. The submitted file must run from the
-repository root without manual commands and must create its output under `data/derived/`.
-
-## Before the next session
-
-Read `help describe`, `help codebook`, `help summarize`, and `help save` inside Stata.
+Complete the TODO items in `exercise.do`. Submit a do-file that imports the raw CSV,
+documents the unit of observation, inspects candidate identifiers, and saves an imported
+`.dta` file under `data/derived/`.

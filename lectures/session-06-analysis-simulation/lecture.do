@@ -1,61 +1,47 @@
 version 18.0
 clear all
 set more off
-
-capture mkdir "output"
-capture mkdir "output/logs"
-capture mkdir "output/figures"
-capture confirm file "data/derived/firm_year_analysis.dta"
-if _rc != 0 quietly do "scripts/02_build_analysis_data.do"
+set varabbrev off
 
 capture log close session06
-log using "output/logs/session-06.log", name(session06) text replace
-use "data/derived/firm_year_analysis.dta", clear
+log using "output/logs/session06.log", name(session06) text replace
 
-drop if missing(ln_annual_revenue, employees, investment)
+use "data/derived/hotel_panel.dta", clear
+keep if accommodation_type == "Hotel"
+keep if price_per_night <= 1000 & !missing(distance, rating, stars)
 
-* Factor-variable notation tells Stata which predictors are categorical.
-regress ln_annual_revenue c.employees c.investment i.exporter i.year ///
-    i.industry_id, vce(robust)
-estimates store main_model
+regress ln_price c.distance c.rating c.stars i.city_id i.weekend, vce(robust)
+assert e(N) > 100
 
-* Margins converts model coefficients into adjusted predictions.
-margins exporter
+margins city_id
 marginsplot, ///
-    title("Adjusted log revenue by export status") ///
-    ytitle("Predicted log annual revenue") ///
-    name(export_margins, replace)
-graph export "output/figures/session06-export-margins.png", replace width(1600)
+    title("Adjusted hotel price by search city") ///
+    ytitle("Predicted log price per night")
+graph export "output/figures/session06_city_margins.png", replace width(1600)
 
-predict fitted_log_revenue, xb
-predict regression_residual, residuals
-summarize regression_residual
+predict residual if e(sample), residuals
+summarize residual
+twoway scatter residual distance if e(sample), msize(vsmall) ///
+    yline(0) title("Regression residuals and distance") ///
+    xtitle("Distance to city center (miles)") ytitle("Residual")
+graph export "output/figures/session06_residuals.png", replace width(1600)
 
-twoway scatter regression_residual fitted_log_revenue, ///
-    yline(0, lcolor(maroon)) ///
-    xtitle("Fitted log revenue") ytitle("Residual") ///
-    title("Residual diagnostic") ///
-    name(residual_plot, replace)
-graph export "output/figures/session06-residuals.png", replace width(1600)
-
-* Simulation reveals sampling variation by repeating the same random experiment.
-capture program drop draw_mean
-program define draw_mean, rclass
+capture program drop resample_mean_price
+program define resample_mean_price, rclass
     version 18.0
     preserve
-    sample 12, count
-    quietly summarize annual_revenue
+    bsample 60
+    quietly summarize price_per_night
     return scalar mean = r(mean)
     restore
 end
 
-simulate sample_mean=r(mean), reps(250) seed(5241) nodots: draw_mean
-summarize sample_mean, detail
-histogram sample_mean, normal percent ///
-    title("Sampling distribution of the mean") ///
-    xtitle("Mean annual revenue in samples of 12") ///
-    name(mean_simulation, replace)
-graph export "output/figures/session06-sampling-distribution.png", replace width(1600)
+simulate mean_price=r(mean), reps(250) seed(20260914) nodots: ///
+    resample_mean_price
+summarize mean_price
+histogram mean_price, percent ///
+    title("Resampling distribution of mean hotel price") ///
+    xtitle("Mean price per night (EUR)") ytitle("Percent")
+graph export "output/figures/session06_resampling.png", replace width(1600)
 
-display as result "Session 6 analysis and simulation workflow completed."
 log close session06

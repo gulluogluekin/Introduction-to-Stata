@@ -1,24 +1,17 @@
-# Session 3: Combining and reshaping
+# Session 3: Combining and reshaping hotel data
 
 Date: 28 September 2026
 
 ## Learning goals
 
-- Identify the unit of observation and test whether keys are unique.
-- Distinguish `append` from `merge` and inspect merge results before dropping `_merge`.
-- Reshape quarterly variables from wide to long form.
-- Aggregate observations to a new unit with `collapse`.
-
-## Files
-
-- `lecture.do`: appends years, merges lookup data, reshapes revenue, and exports a summary.
-- `exercise.do`: checkpoint reproducing the complete combination workflow.
+- Identify keys in hotel-feature and repeated-price tables.
+- Append 2017 and 2018 price observations.
+- Merge repeated prices with one hotel-characteristics record.
+- Inspect `_merge` before making any deletion decision.
+- Reshape hotel prices between long and wide layouts.
+- Aggregate price observations by city and year.
 
 ## Checkpoint
 
-Submit a do-file that ends with one row per firm-year-quarter and exports a region-year
-summary. Include at least one `isid` and one merge assertion.
-
-## Before the next session
-
-Read `help append`, `help merge`, `help reshape`, and `help collapse`.
+Create a reproducible panel from the prepared annual price and feature files, reshape a
+small subset, and export one grouped city-year summary.

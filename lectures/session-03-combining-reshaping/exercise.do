@@ -1,22 +1,16 @@
 version 18.0
 clear all
 set more off
+set varabbrev off
 
-capture mkdir "output"
-capture mkdir "output/logs"
-capture confirm file "data/derived/firms_2023_imported.dta"
-if _rc != 0 quietly do "scripts/01_prepare_data.do"
+capture mkdir "output/tables"
+use "data/derived/hotel_prices_2017.dta", clear
 
-capture log close checkpoint03
-log using "output/logs/checkpoint-03.log", name(checkpoint03) text replace
-
-use "data/derived/firms_2023_imported.dta", clear
-
-* TODO 1: Append the 2024 imported dataset and verify firm_id year is unique.
-* TODO 2: Standardize the industry and region keys.
-* TODO 3: Merge both lookup datasets and investigate _merge before dropping it.
-* TODO 4: Reshape revenue_q1-revenue_q4 into a firm-quarter dataset.
-* TODO 5: Collapse mean revenue by year and region, then export a CSV summary.
+* TODO 1: Append the 2018 price file and verify the composite key.
+* TODO 2: Merge the hotel feature file with the correct merge cardinality.
+* TODO 3: Investigate _merge and assert that every price has hotel attributes.
+* TODO 4: Create price per night and a search-date identifier.
+* TODO 5: Reshape a one-city subset from long to wide and back to long.
+* TODO 6: Collapse mean price and quote count by city and year; export a CSV.
 
 display as text "Complete the TODO items and submit your reproducible do-file."
-log close checkpoint03

@@ -1,23 +1,17 @@
 version 18.0
 clear all
 set more off
+set varabbrev off
 
-capture mkdir "output"
-capture mkdir "output/logs"
 capture mkdir "output/figures"
-capture confirm file "data/derived/firm_year_analysis.dta"
-if _rc != 0 quietly do "scripts/02_build_analysis_data.do"
+use "data/derived/hotel_panel.dta", clear
+keep if accommodation_type == "Hotel"
 
-capture log close checkpoint06
-log using "output/logs/checkpoint-06.log", name(checkpoint06) text replace
-use "data/derived/firm_year_analysis.dta", clear
-
-* TODO 1: Define a complete-case estimation sample for your selected variables.
-* TODO 2: Regress log annual revenue on firm size, investment, year, and one factor variable.
-* TODO 3: Explain one continuous and one categorical coefficient in comments.
-* TODO 4: Use margins for the categorical predictor and export a margins plot.
+* TODO 1: Define and validate a complete-case estimation sample.
+* TODO 2: Regress log nightly price on distance, rating, stars, city, and weekend.
+* TODO 3: Interpret one continuous and one categorical coefficient in comments.
+* TODO 4: Use margins for city and export a margins plot.
 * TODO 5: Predict residuals and check whether they are centered near zero.
-* TODO 6: Write a small simulation program that returns a sample mean.
+* TODO 6: Resample the data repeatedly and graph the distribution of mean price.
 
-display as text "Complete the TODO items and submit the do-file plus exported figure."
-log close checkpoint06
+display as text "Complete the TODO items and submit the do-file plus exported figures."

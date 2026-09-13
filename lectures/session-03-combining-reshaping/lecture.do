@@ -1,55 +1,41 @@
 version 18.0
 clear all
 set more off
-
-capture mkdir "data/derived"
-capture mkdir "output"
-capture mkdir "output/logs"
-capture mkdir "output/tables"
-
-capture confirm file "data/derived/firms_2024_imported.dta"
-if _rc != 0 quietly do "scripts/01_prepare_data.do"
+set varabbrev off
 
 capture log close session03
-log using "output/logs/session-03.log", name(session03) text replace
+log using "output/logs/session03.log", name(session03) text replace
 
-* Appending stacks observations with the same variables.
-use "data/derived/firms_2023_imported.dta", clear
-append using "data/derived/firms_2024_imported.dta", generate(source_file)
-isid firm_id year
-tabulate year source_file
+use "data/derived/hotel_prices_2017.dta", clear
+isid hotel_id year month weekend holiday nnights
+append using "data/derived/hotel_prices_2018.dta"
+isid hotel_id year month weekend holiday nnights
 
-* Clean the key codes before merging lookup tables.
-replace industry_code = upper(strtrim(industry_code))
-replace region_code = upper(strtrim(region_code))
-
-* A many-to-one merge adds one lookup record to many firms.
-merge m:1 industry_code using "data/derived/industry_lookup.dta"
+merge m:1 hotel_id using "data/derived/hotel_features.dta"
 tabulate _merge
 assert _merge == 3
 drop _merge
 
-merge m:1 region_code using "data/derived/region_lookup.dta"
-assert _merge == 3
-drop _merge
+generate double price_per_night = price / nnights
+label variable price_per_night "Price per night (EUR)"
+egen search_id = group(year month weekend holiday nnights), label
 
-* Wide quarterly columns become a long firm-quarter panel.
-reshape long revenue_q, i(firm_id year) j(quarter)
-rename revenue_q revenue
-isid firm_id year quarter
-sort firm_id year quarter
-
-list firm_id year quarter revenue in 1/12, noobs sepby(firm_id)
-
-* Collapse creates a new dataset at the requested level of observation.
 preserve
-collapse (mean) mean_revenue=revenue (count) firm_quarters=revenue, ///
-    by(year industry_name)
-sort year industry_name
-export delimited using "output/tables/session03-industry-summary.csv", replace
-list, noobs sepby(year)
+    keep if city == "Vienna" & accommodation_type == "Hotel"
+    keep hotel_id search_id price_per_night
+    isid hotel_id search_id
+    reshape wide price_per_night, i(hotel_id) j(search_id)
+    describe price_per_night*
+    reshape long price_per_night, i(hotel_id) j(search_id)
+    isid hotel_id search_id
 restore
 
-save "data/derived/session03_firm_quarter.dta", replace
-display as result "Session 3 combining and reshaping workflow completed."
+preserve
+    collapse (count) price_quotes=price_per_night ///
+        (mean) mean_price=price_per_night, by(city year)
+    list, separator(0)
+    export delimited using "output/tables/session03_city_year.csv", replace
+restore
+
+save "data/derived/session03_hotel_panel.dta", replace
 log close session03
