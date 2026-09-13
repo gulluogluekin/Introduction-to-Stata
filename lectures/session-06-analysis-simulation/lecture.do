@@ -3,6 +3,9 @@ clear all
 set more off
 set varabbrev off
 
+* Optional, ungraded supplementary material on regression and resampling.
+* Session 6 is the final exam (60%), covering material taught in Sessions 1-5.
+* This file is not the Session 6 teaching plan; these additional topics are not examined.
 capture log close session06
 log using "output/logs/session06.log", name(session06) text replace
 
