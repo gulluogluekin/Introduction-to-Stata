@@ -2,6 +2,13 @@
 /AGENTS.md
 /CLAUDE.md
 
+# Instructor-only assessment and presentation source files
+/assignments/
+/COURSE_DESIGN.md
+/lectures/session-01-stata-workflow/presentation/course-introduction.tex
+/lectures/session-01-stata-workflow/presentation/course-introduction-presenter.pdf
+/lectures/session-01-stata-workflow/presentation/Makefile
+
 # Stata-generated data and logs
 data/derived/*
 !data/derived/.gitkeep
