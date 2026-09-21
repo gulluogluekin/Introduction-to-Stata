@@ -30,10 +30,13 @@ nonnumeric text is reported rather than silently converted to missing.
 ## Graded checkpoint 1
 
 Complete the six TODOs in `exercise.do`, starting with the raw
-`data/derived/session01_vienna_raw.dta` saved in Lecture 1. Use the alternative landmark
-distance (`center2distance`) and alternative rating (`rating2_ta`) rather than copying
-the lecture's city-centre distance and guest-rating transformations. Convert distance
-to kilometres, explicitly handle the rating's `NA` marker, and preserve the source strings.
+`data/derived/session01_vienna_raw.dta` saved in Lecture 1. Use `center2distance`, the
+distance from each hotel to the reference location named in `center2label`, and the
+alternative rating (`rating2_ta`). These differ from the lecture's city-centre distance
+and guest rating. Inspect `center2label` to identify the place and include its name and
+the distance unit in your new variable labels. The `landmark_` prefix in the exercise's
+variable names refers to this reference location. Convert distance to kilometres,
+explicitly handle the rating's `NA` marker, and preserve the source strings.
 
 Diagnose invalid identifiers and exact duplicates, then validate one observation per hotel.
 Write at least three assertions covering ranges, conversion, and missingness. Submit a

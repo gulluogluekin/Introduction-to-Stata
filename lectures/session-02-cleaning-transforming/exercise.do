@@ -8,11 +8,15 @@ set varabbrev off
 * Variation: clean a different distance and rating, then change distance units.
 use "data/derived/session01_vienna_raw.dta", clear
 
-* TODO 1: Inspect center2label, center2distance, and rating2_ta. Identify the
-*         landmark and the text used for an unavailable alternative rating.
+* center2label names a reference location. center2distance gives each hotel's
+* distance to that location. The landmark_ prefix below refers to this location.
+*
+* TODO 1: Inspect center2label to identify the place that center2distance measures
+*         distance to. Inspect center2distance to check the unit, and rating2_ta
+*         to identify the text used for an unavailable alternative rating.
 * TODO 2: Adapt the lecture's distance conversion to create landmark_distance_miles
-*         from center2distance. Preserve the source string and label the new
-*         variable with the correct landmark and unit (help destring).
+*         from center2distance. Preserve the source string. Label the new variable
+*         as distance to the place named in center2label, in miles (help destring).
 * TODO 3: Create double-precision landmark_distance_km using 1 mile = 1.609344 kilometres.
 *         Label it and inspect both units for a few rows (help generate).
 * TODO 4: Create numeric alternative_rating from rating2_ta, explicitly treating
