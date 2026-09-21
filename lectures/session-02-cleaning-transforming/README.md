@@ -12,6 +12,21 @@ Assessment: individual checkpoint 1 of 4, worth 10% of the overall course grade.
 - Investigate and remove records with missing keys and perfect duplicates.
 - Use `assert` and `isid` as executable documentation.
 
+## Lecture sequence: text to numbers
+
+The guest-rating example proceeds one command at a time:
+
+1. Inspect the original strings, such as `4.3 /5` and `NA`.
+2. Reuse `split` to separate the rating from the `/5` scale, then inspect the parts.
+3. Replace the known `NA` marker with an empty string in the working variable.
+4. Use `destring` to create the numeric rating and compare it with the original text.
+5. Remove helper variables while preserving the source string.
+
+In the supplied Vienna CSV, `rating_reviewcount` is a string variable. Inspect its type
+with `describe`, make a working copy, handle `NA`, and convert it directly. No return-code
+check or programming branch is needed. The lecture avoids `force` so that unexpected
+nonnumeric text is reported rather than silently converted to missing.
+
 ## Graded checkpoint 1
 
 Complete the six TODOs in `exercise.do`, starting with the raw
